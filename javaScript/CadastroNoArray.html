@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Elemento</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        li {
+            width: auto;
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .edit, .delete {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .edit {
+            background: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cadastro de Elemento em um Array</h1>
+    <div>
+        <form id="formAdicionarElementos">
+            <label for="elemento">Digite um elemento</label>
+            <input type="text" id="elemento" name="elemento">
+            <button type="submit">Adicionar</button>
+        </form>
+        <ul id="lista"></ul>
+    </div>
+
+    <script>
+        let elementos = [];
+
+        document.getElementById("formAdicionarElementos").addEventListener("submit", function(event) {
+            event.preventDefault(); // Impede o recarregamento da página
+            AdicionarElemento();
+        });
+
+        function AdicionarElemento() {
+            let elemento = document.getElementById("elemento").value;
+            if (elemento.trim() !== "") {
+                elementos.push(elemento);
+                atualizarLista();
+            }
+            document.getElementById("elemento").value = "";
+        }
+
+        function atualizarLista() {
+            let lista = document.getElementById("lista");
+            lista.innerHTML = ""; // Limpa a lista antes de recriar os elementos
+
+            elementos.forEach((valor, index) => {
+                let li = document.createElement("li");
+                
+                let span = document.createElement("span");
+                span.textContent = valor;
+
+                let btnEditar = document.createElement("button");
+                btnEditar.textContent = "Editar";
+                btnEditar.classList.add("edit");
+                btnEditar.onclick = function() {
+                    EditarElemento(index);
+                };
+
+                let btnDeletar = document.createElement("button");
+                btnDeletar.textContent = "Deletar";
+                btnDeletar.classList.add("delete");
+                btnDeletar.onclick = function() {
+                    DeletarElemento(index);
+                };
+
+                li.appendChild(span);
+                li.appendChild(btnEditar);
+                li.appendChild(btnDeletar);
+                lista.appendChild(li);
+            });
+        }
+
+        function EditarElemento(index) {
+            let novoValor = prompt("Editar item:", elementos[index]);
+            if (novoValor !== null && novoValor.trim() !== "") {
+                elementos[index] = novoValor;
+                atualizarLista();
+            }
+        }
+
+        function DeletarElemento(index) {
+            if (confirm("Tem certeza que deseja deletar este item?")) {
+                elementos.splice(index, 1);
+                atualizarLista();
+            }
+        }
+    </script>
+</body>
+</html>
